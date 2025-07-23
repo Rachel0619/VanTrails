@@ -6,23 +6,29 @@ Run this script to scrape all trails data from vancouvertrails.com
 
 import sys
 import os
-sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
 
-from scrapers.vancouver_trails_scraper import VancouverTrailsScraper
+# Add src directory to path
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
+from scrapers.scraper import VancouverTrailsScraper
 
 def main():
     print("🏔️  Vancouver Trails Scraper")
     print("=" * 40)
     
+    # Test mode - only scrape 10 trails
+    TEST_MODE = False
+    
     scraper = VancouverTrailsScraper()
     
     try:
-        trails = scraper.scrape_all_trails()
+        csv_file = "../../data/vancouver_trails.csv"
+        trails = scraper.scrape_all_trails(csv_file, test_mode=TEST_MODE)
         
         if trails:
-            scraper.save_to_csv("data/vancouver_trails.csv")
+            scraper.save_to_csv(csv_file)
             print(f"\n✅ Successfully scraped {len(trails)} trails!")
-            print(f"📄 Data saved to: data/vancouver_trails.csv")
+            print(f"📄 Data saved to: {csv_file}")
             
             # Show summary statistics
             print(f"\n📊 Summary:")
@@ -31,6 +37,14 @@ def main():
             # Count trails with descriptions
             with_desc = sum(1 for t in trails if t.get('description', '').strip())
             print(f"   With descriptions: {with_desc}")
+            
+            # Count trails with features
+            dog_friendly = sum(1 for t in trails if t.get('dog_friendly'))
+            transit = sum(1 for t in trails if t.get('public_transit'))
+            camping = sum(1 for t in trails if t.get('camping'))
+            print(f"   Dog friendly: {dog_friendly}")
+            print(f"   Public transit: {transit}")
+            print(f"   Camping: {camping}")
             
             # Show sample
             print(f"\n🥾 Sample trails:")

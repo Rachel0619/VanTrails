@@ -21,6 +21,14 @@ class VancouverTrailsScraper:
         })
         self.trails_data = []
         self.existing_trails: Set[str] = set()
+        
+        # Filter URLs for feature detection
+        self.filter_urls = {
+            'dog_friendly': f"{base_url}/trails/?filter=dogs",
+            'public_transit': f"{base_url}/trails/?filter=transit", 
+            'camping': f"{base_url}/trails/?filter=camping"
+        }
+        
 
     def get_page(self, url: str) -> Optional[BeautifulSoup]:
         """Fetch and parse a webpage."""
@@ -105,6 +113,33 @@ class VancouverTrailsScraper:
         
         return trails
 
+    def get_trails_with_features(self) -> dict:
+        """Get sets of trail names for each feature by scraping filtered pages."""
+        feature_trails = {}
+        
+        for feature, filter_url in self.filter_urls.items():
+            logger.info(f"Scraping {feature} trails from {filter_url}")
+            soup = self.get_page(filter_url)
+            
+            if soup:
+                trails = self.extract_trail_data(soup)
+                trail_names = {trail['name'] for trail in trails if trail.get('name')}
+                feature_trails[feature] = trail_names
+                logger.info(f"Found {len(trail_names)} trails with {feature}")
+                
+                # Debug: Show first few trail names for this feature
+                sample_trails = list(trail_names)[:3]
+                logger.info(f"Sample {feature} trails: {sample_trails}")
+                
+                # Be respectful to the server
+                time.sleep(1)
+            else:
+                feature_trails[feature] = set()
+                logger.warning(f"Failed to load {feature} filter page")
+        
+        
+        return feature_trails
+
     def extract_trail_description(self, trail_url: str) -> str:
         """Extract detailed description from individual trail page."""
         soup = self.get_page(trail_url)
@@ -157,12 +192,16 @@ class VancouverTrailsScraper:
         else:
             logger.info(f"No existing CSV file found at {csv_file}")
 
-    def scrape_all_trails(self, csv_file: str = "data/vancouver_trails.csv") -> List[Dict]:
+    def scrape_all_trails(self, csv_file: str = "data/vancouver_trails.csv", test_mode: bool = False) -> List[Dict]:
         """Main method to scrape all trail data."""
         logger.info(f"Starting to scrape trails from {self.trails_url}")
         
         # Load existing trails to avoid re-scraping
         self.load_existing_trails(csv_file)
+        
+        # Get feature data by scraping filtered pages
+        print("\n📋 Extracting trail features from filter pages...")
+        feature_trails = self.get_trails_with_features()
         
         # Get the main trails page
         soup = self.get_page(self.trails_url)
@@ -174,6 +213,18 @@ class VancouverTrailsScraper:
         all_trails = self.extract_trail_data(soup)
         logger.info(f"Found {len(all_trails)} trails on main page")
         
+        # Add accurate feature data to all trails
+        for trail in all_trails:
+            trail_name = trail.get('name')
+            if trail_name:
+                # Set features based on filtered page results
+                trail['dog_friendly'] = trail_name in feature_trails.get('dog_friendly', set())
+                trail['public_transit'] = trail_name in feature_trails.get('public_transit', set())
+                trail['camping'] = trail_name in feature_trails.get('camping', set())
+                
+                # Simple logic: no_dogs_allowed is the opposite of dog_friendly
+                trail['no_dogs_allowed'] = not trail['dog_friendly']
+        
         # Filter out trails that already exist
         new_trails = [trail for trail in all_trails if trail.get('name') not in self.existing_trails]
         
@@ -181,7 +232,13 @@ class VancouverTrailsScraper:
             print(f"\n✅ No new trails found! All {len(all_trails)} trails already exist in CSV.")
             return []
         
-        print(f"\n🆕 Found {len(new_trails)} new trails to scrape (skipping {len(all_trails) - len(new_trails)} existing)")
+        # Apply test mode limit BEFORE description scraping
+        if test_mode:
+            original_count = len(new_trails)
+            new_trails = new_trails[:10]
+            print(f"\n🧪 TEST MODE: Limited to {len(new_trails)} trails (out of {original_count} new trails)")
+        else:
+            print(f"\n🆕 Found {len(new_trails)} new trails to scrape (skipping {len(all_trails) - len(new_trails)} existing)")
         
         # Enhance each NEW trail with detailed description
         print(f"\n🔄 Scraping detailed descriptions for {len(new_trails)} new trails...")
@@ -207,7 +264,7 @@ class VancouverTrailsScraper:
         new_df = pd.DataFrame(self.trails_data)
         
         # Reorder columns for better readability
-        column_order = ['name', 'rating', 'region', 'difficulty', 'time', 'distance', 'elevation', 'season', 'url', 'description']
+        column_order = ['name', 'rating', 'region', 'difficulty', 'time', 'distance', 'elevation', 'season', 'dog_friendly', 'no_dogs_allowed', 'public_transit', 'camping', 'url', 'description']
         existing_columns = [col for col in column_order if col in new_df.columns]
         other_columns = [col for col in new_df.columns if col not in column_order]
         new_df = new_df[existing_columns + other_columns]
