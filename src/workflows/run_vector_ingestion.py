@@ -13,7 +13,7 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 # Add src directory to path
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-from vector.vector_search import TrailVectorDB
+from rag.vector_search import TrailVectorDB
 from processing.query_parser import QueryParser
 from llm.client import llm_function
 

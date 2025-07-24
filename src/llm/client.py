@@ -13,12 +13,15 @@ load_dotenv()
 # Initialize OpenAI client
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-def llm_function(prompt: str) -> str:
+def llm_function(prompt: str, system_prompt: str, temperature: float = 0.1, max_tokens: int = 200) -> str:
     """
-    Simple LLM function for query parser
+    LLM function that can take custom system prompts and generation parameters
     
     Args:
-        prompt: The prompt to send to LLM
+        prompt: The user prompt to send to LLM
+        system_prompt: The system prompt (required - no default)
+        temperature: Sampling temperature (0.0-2.0, default 0.1 for precise tasks)
+        max_tokens: Maximum tokens to generate (default 200 for short responses)
         
     Returns:
         LLM response
@@ -26,11 +29,11 @@ def llm_function(prompt: str) -> str:
     response = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
-            {"role": "system", "content": "You are a precise filter extraction system. Return only valid JSON."},
+            {"role": "system", "content": system_prompt},
             {"role": "user", "content": prompt}
         ],
-        temperature=0.1,
-        max_tokens=200
+        temperature=temperature,
+        max_tokens=max_tokens
     )
     
     return response.choices[0].message.content.strip()
