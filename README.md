@@ -1,8 +1,8 @@
 # VanTrails
 
-![VanTrails Cover](images/cover.jpg)
-
 An intelligent RAG application that provides personalized Vancouver hiking trail recommendations.
+
+![VanTrails Cover](images/cover.jpg)
 
 ## Project Overview
 
