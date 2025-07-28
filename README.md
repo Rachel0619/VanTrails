@@ -89,8 +89,6 @@ results = vector_db.search_trails(query, limit=5)
 recommendation = generate_trail_recommendation(
     query, 
     resul.csv  # Processed data
-├── qdrant_storage/           # Vector database (gitignored)
-└── experiment.ipynb         # Development notebookts, 
     llm_function,
     temperature=0.7,
     max_tokens=600
