@@ -1,4 +1,7 @@
 # VanTrails
+
+![VanTrails Cover](images/cover.jpg)
+
 An intelligent RAG application that provides personalized Vancouver hiking trail recommendations.
 
 ## Project Overview
@@ -88,10 +91,8 @@ results = vector_db.search_trails(query, limit=5)
 # Generate recommendation
 recommendation = generate_trail_recommendation(
     query, 
-    resul.csv  # Processed data
-    llm_function,
-    temperature=0.7,
-    max_tokens=600
+    results,
+    llm_function
 )
 
 print(recommendation)
