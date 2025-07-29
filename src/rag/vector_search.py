@@ -12,15 +12,16 @@ import hashlib
 from typing import List, Dict, Any
 from qdrant_client import QdrantClient, models
 from tqdm import tqdm
+from dotenv import load_dotenv
 
+load_dotenv()
 
 # Configuration
-EMBEDDING_DIMENSIONALITY = 512
-COLLECTION_NAME = "vancouver_trails"
-QDRANT_HOST = "localhost"
-QDRANT_PORT = 6333
-MODEL_NAME = "jinaai/jina-embeddings-v2-small-en"
-
+EMBEDDING_DIMENSIONALITY = os.getenv('EMBEDDING_DIMENSIONALITY')
+COLLECTION_NAME = os.getenv('COLLECTION_NAME')
+QDRANT_HOST = os.getenv('QDRANT_HOST')
+QDRANT_PORT = int(os.getenv('QDRANT_PORT'))
+MODEL_NAME = os.getenv('MODEL_NAME')
 
 class TrailVectorDB:
     """Qdrant vector database for trails"""

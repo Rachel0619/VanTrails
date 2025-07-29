@@ -27,24 +27,28 @@ The system is powered by a comprehensive dataset of Vancouver-area trails includ
 
 ## Technologies
 
-- Python 3.13: Modern Python with latest features
-- Qdrant: High-performance vector database for semantic search
-- OpenAI GPT-4o-mini: Language model for generating recommendations
+- Qdrant for vector database and semantic search
+- GPT-4o-mini as an LLM
+- FLASK for REST API
+- Gradio for user interface
+- Docker for containerization
 
 ## Getting Started
 
 ### Prerequisites
 - Python 3.13+
 - UV package manager
-- Qdrant server (local or cloud)
+- Qdrant server
 - OpenAI API key (or other LLM provider)
 
 ### Preparation
 
 - uv
-- OpenAI API
+- set up environment variables: rename `.env.example` to `.env` and then replace openAI API with your own.
 
 ### Using the application
+
+#### REST API
 
 ```bash
 uv run answer.py
@@ -62,6 +66,17 @@ curl -X POST \
     -d "${DATA}" \
     ${URL}/api/recommend
 ```
+
+### Gradio Interface
+
+You can also interact with this RAG system by running the Gradio interface.
+
+```bash
+# run this in the root folder of the project
+gradio app.py
+```
+
+Navigate to local URL `http://127.0.0.1:7860` and ask questions.
 
 ## Key Features
 

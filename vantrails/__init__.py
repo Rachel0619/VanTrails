@@ -8,9 +8,9 @@ def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
-        SECRET_KEY='dev',
-        QDRANT_HOST='localhost',
-        QDRANT_PORT=6333,
+        SECRET_KEY=os.getenv('SECRET_KEY'),
+        QDRANT_HOST=os.getenv('QDRANT_HOST'),
+        QDRANT_PORT=int(os.getenv('QDRANT_PORT')),
         OPENAI_API_KEY=os.getenv('OPENAI_API_KEY'),
     )
 
