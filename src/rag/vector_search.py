@@ -29,13 +29,13 @@ class TrailVectorDB:
         """Initialize Qdrant client and embedding model"""
         self.client = QdrantClient(host=host, port=port)
         
-        print(f"🤖 Using embedding model: {MODEL_NAME}")
-        print(f"✅ Model configured with {EMBEDDING_DIMENSIONALITY} dimensions")
+        # print(f"Using embedding model: {MODEL_NAME}")
+        # print(f"Model configured with {EMBEDDING_DIMENSIONALITY} dimensions")
         
     
     def create_collection(self):
         """Create collection if it doesn't exist"""
-        print(f"🗄️  Checking collection: {COLLECTION_NAME}")
+        print(f"Checking collection: {COLLECTION_NAME}")
         
         # Check if collection exists
         try:
@@ -52,7 +52,7 @@ class TrailVectorDB:
                     distance=models.Distance.COSINE
                 )
             )
-            print("✅ Collection created successfully")
+            print("Collection created successfully")
             return True  # New collection created
     
     def get_existing_trails(self) -> set:
@@ -134,19 +134,19 @@ class TrailVectorDB:
     
     def ingest_trails(self, csv_path: str):
         """Complete ingestion process - only new trails"""
-        print("🏔️  Starting incremental trail ingestion")
+        print("Starting incremental trail ingestion")
         print("=" * 50)
         
         # Prepare only new data
         new_points = self.prepare_new_trail_data(csv_path)
         
         if not new_points:
-            print("✅ No new trails to ingest - database is up to date!")
+            print("No new trails to ingest - database is up to date!")
             collection_info = self.client.get_collection(COLLECTION_NAME)
             return collection_info.points_count
         
         # Upload new points to Qdrant
-        print(f"📤 Uploading {len(new_points)} new trails...")
+        print(f"Uploading {len(new_points)} new trails...")
         self.client.upsert(
             collection_name=COLLECTION_NAME,
             points=new_points
@@ -154,7 +154,7 @@ class TrailVectorDB:
         
         # Verify ingestion
         collection_info = self.client.get_collection(COLLECTION_NAME)
-        print(f"✅ Total trails in database: {collection_info.points_count}")
+        print(f"Total trails in database: {collection_info.points_count}")
         print(f"   ({len(new_points)} newly added)")
         
         return collection_info.points_count

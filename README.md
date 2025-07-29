@@ -27,18 +27,9 @@ The system is powered by a comprehensive dataset of Vancouver-area trails includ
 
 ## Technologies
 
-- **Python 3.13**: Modern Python with latest features
-- **Qdrant**: High-performance vector database for semantic search
-- **OpenAI GPT-4o-mini**: Language model for generating recommendations
-
-## Key Features
-
-- **Semantic Search**: Understands natural language queries
-- **Flexible LLM Support**: Works with OpenAI, Claude, Llama, and other models
-- **Rich Metadata Filtering**: Filter by difficulty, region, dog-friendliness, seasons, etc.
-- **Conversational Responses**: Get detailed explanations, not just lists
-- **Incremental Updates**: Add new trails without rebuilding the entire database
-- **Extensible Architecture**: Easy to add new data sources and features
+- Python 3.13: Modern Python with latest features
+- Qdrant: High-performance vector database for semantic search
+- OpenAI GPT-4o-mini: Language model for generating recommendations
 
 ## Getting Started
 
@@ -48,55 +39,38 @@ The system is powered by a comprehensive dataset of Vancouver-area trails includ
 - Qdrant server (local or cloud)
 - OpenAI API key (or other LLM provider)
 
-### Installation
+### Preparation
+
+- uv
+- OpenAI API
+
+### Using the application
+
 ```bash
-# Clone the repository
-git clone <repository-url>
-cd VanTrails
-
-# Install dependencies
-uv sync
-
-# Set up environment variables
-cp .env.example .env
-# Add your OpenAI API key to .env
+uv run answer.py
 ```
 
-### Quick Start
 ```bash
-# Start Qdrant server
-docker run -p 6333:6333 qdrant/qdrant
+URL=http://localhost:8000
+QUERY="I want an easy hike with my dog which is less than 5 km for total distance"
+DATA='{
+    "query": "'${QUERY}'"
+}'
 
-# Ingest trail data
-python src/workflows/run_vector_ingestion.py
-
-# Test the system
-python src/rag/generate_recommendations.py
+curl -X POST \
+    -H "Content-Type: application/json" \
+    -d "${DATA}" \
+    ${URL}/api/recommend
 ```
 
-## Example Usage
+## Key Features
 
-```python
-from src.rag.vector_search import TrailVectorDB
-from src.rag.generate_recommendations import generate_trail_recommendation
-from src.llm.client import llm_function
-
-# Initialize the system
-vector_db = TrailVectorDB()
-
-# Search for trails
-query = "I want an easy hike with my dog near Vancouver"
-results = vector_db.search_trails(query, limit=5)
-
-# Generate recommendation
-recommendation = generate_trail_recommendation(
-    query, 
-    results,
-    llm_function
-)
-
-print(recommendation)
-```
+- Semantic Search: Understands natural language queries
+- Flexible LLM Support: Works with OpenAI, Claude, Llama, and other models
+- Rich Metadata Filtering: Filter by difficulty, region, dog-friendliness, seasons, etc.
+- Conversational Responses: Get detailed explanations, not just lists
+- Incremental Updates: Add new trails without rebuilding the entire database
+- Extensible Architecture: Easy to add new data sources and features
 
 ## Contributing
 

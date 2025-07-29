@@ -66,17 +66,3 @@ Most Relevant Trails Found:
 Please provide a thoughtful recommendation based on the user's query and these trail options."""
 
     return llm_function(user_prompt, system_prompt, temperature=0.7, max_tokens=600)
-
-
-if __name__ == "__main__":
-    # Test the RAG workflow
-    from rag.vector_search import TrailVectorDB
-    
-    vector_db = TrailVectorDB()
-    test_query = "I want an easy hike with my dog near Vancouver"
-    search_results = vector_db.search_trails(test_query)
-    response = generate_trail_recommendation(test_query, search_results, default_llm_function)
-    
-    print(f"Query: {test_query}")
-    print("\nRecommendation:")
-    print(response)
