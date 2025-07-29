@@ -43,8 +43,13 @@ The system is powered by a comprehensive dataset of Vancouver-area trails includ
 
 ### Preparation
 
-- uv
-- set up environment variables: rename `.env.example` to `.env` and then replace openAI API with your own.
+#### Docker
+
+TBD
+
+#### Set up environment variables
+
+rename `.env.example` to `.env` and then replace openAI API with your own.
 
 ### Using the application
 
@@ -67,7 +72,7 @@ curl -X POST \
     ${URL}/api/recommend
 ```
 
-### Gradio Interface
+#### Gradio Interface
 
 You can also interact with this RAG system by running the Gradio interface.
 
@@ -77,6 +82,15 @@ gradio app.py
 ```
 
 Navigate to local URL `http://127.0.0.1:7860` and ask questions.
+
+## Developer Guide
+
+### Ingestion
+
+You may want to rerun the data ingestion pipeline to reproduce the entire project.
+Here are the steps that you should follow:
+
+**TBD**
 
 ## Key Features
 
