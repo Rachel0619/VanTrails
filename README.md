@@ -36,28 +36,35 @@ The system is powered by a comprehensive dataset of Vancouver-area trails includ
 ## Getting Started
 
 ### Prerequisites
-- Python 3.13+
-- UV package manager
-- Qdrant server
+- Python 3.12+
+- Docker
 - OpenAI API key (or other LLM provider)
 
 ### Preparation
-
-#### Docker
-
-TBD
 
 #### Set up environment variables
 
 rename `.env.example` to `.env` and then replace openAI API with your own.
 
-### Using the application
-
-#### REST API
+#### Docker
 
 ```bash
-uv run answer.py
+docker-compose up -d
 ```
+
+If it's your first time running this app, you also need to ingest the entire dataset by running this command before perfoming the search task.
+
+```bash
+docker-compose --profile tools run --rm vantrails-ingest
+```
+
+Then you can check the accessibility of FlaskAPI and Gradio interface by navigating to these sites:
+- FlaskAPI: http://localhost:8000/health
+- Gradio: http://localhost:7860
+
+### Using the application
+
+#### FLASK API
 
 ```bash
 URL=http://localhost:8000
@@ -75,11 +82,6 @@ curl -X POST \
 #### Gradio Interface
 
 You can also interact with this RAG system by running the Gradio interface.
-
-```bash
-# run this in the root folder of the project
-gradio app.py
-```
 
 Navigate to local URL `http://127.0.0.1:7860` and ask questions.
 
