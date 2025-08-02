@@ -28,11 +28,7 @@ class TrailVectorDB:
     
     def __init__(self, host: str = QDRANT_HOST, port: int = QDRANT_PORT):
         """Initialize Qdrant client and embedding model"""
-        self.client = QdrantClient(host=host, port=port)
-        
-        # print(f"Using embedding model: {MODEL_NAME}")
-        # print(f"Model configured with {EMBEDDING_DIMENSIONALITY} dimensions")
-        
+        self.client = QdrantClient(host=host, port=port)   
     
     def create_collection(self):
         """Create collection if it doesn't exist"""
@@ -123,8 +119,9 @@ class TrailVectorDB:
                 'description': description
             }
             
-            # Create point (let Qdrant auto-generate ID)
+            # Create point with unique ID (hash of trail_key)
             point = models.PointStruct(
+                id=hash(trail_key) & 0x7FFFFFFF,  # Ensure positive 32-bit integer
                 vector=vector,
                 payload=payload
             )

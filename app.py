@@ -11,7 +11,7 @@ from rag.vector_search import TrailVectorDB
 from rag.generate_recommendations import generate_trail_recommendation
 from llm.client import llm_function
 
-def recommend_trails(query, results):
+def recommend_trails(query):
     try:
         if not query:
             return "Please enter your question"
@@ -30,7 +30,7 @@ def recommend_trails(query, results):
         return recommendation
     
     except Exception as e:
-        return 'Something went wrong'
+        return f'Error: {str(e)}'
 
 demo = gr.Interface(
     fn=recommend_trails,
@@ -38,4 +38,4 @@ demo = gr.Interface(
     outputs=[gr.Textbox(label="recommendation")],
 )
 
-demo.launch()
+demo.launch(server_name="0.0.0.0", server_port=7860)

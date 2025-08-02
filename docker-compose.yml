@@ -1,0 +1,82 @@
+version: '3.8'
+
+services:
+  # Qdrant Vector Database
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: vantrails-qdrant
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_storage:/qdrant/storage
+    environment:
+      - QDRANT__SERVICE__HTTP_PORT=6333
+      - QDRANT__SERVICE__GRPC_PORT=6334
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "timeout 10s bash -c '</dev/tcp/localhost/6333' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # VanTrails Flask API
+  vantrails-api:
+    build: .
+    container_name: vantrails-api
+    ports:
+      - "8000:8000"
+    environment:
+      - QDRANT_HOST=qdrant
+      - QDRANT_PORT=6333
+    env_file:
+      - .env
+    depends_on:
+      qdrant:
+        condition: service_healthy
+    volumes:
+      - ./data:/app/data:ro
+    restart: unless-stopped
+    command: ["uv", "run", "vantrails/answer.py"]
+
+  # VanTrails Gradio Interface
+  vantrails-ui:
+    build: .
+    container_name: vantrails-ui
+    ports:
+      - "7860:7860"
+    environment:
+      - QDRANT_HOST=qdrant
+      - QDRANT_PORT=6333
+    env_file:
+      - .env
+    depends_on:
+      qdrant:
+        condition: service_healthy
+    volumes:
+      - ./data:/app/data:ro
+    restart: unless-stopped
+    command: ["uv", "run", "python", "app.py"]
+
+  # Data Ingestion Service (run once)
+  vantrails-ingest:
+    build: .
+    container_name: vantrails-ingest
+    environment:
+      - QDRANT_HOST=qdrant
+      - QDRANT_PORT=6333
+    env_file:
+      - .env
+    depends_on:
+      qdrant:
+        condition: service_healthy
+    volumes:
+      - ./data:/app/data:ro
+    profiles:
+      - tools
+    command: ["uv", "run", "src/workflows/run_vector_ingestion.py"]
+
+volumes:
+  qdrant_storage:
+    driver: local

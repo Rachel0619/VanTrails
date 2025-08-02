@@ -31,7 +31,7 @@ def main():
         is_new_collection = vector_db.create_collection()
         
         # Ingest trail data (handles incremental ingestion internally)
-        csv_path = "../../data/vancouver_trails_clean.csv"
+        csv_path = "data/vancouver_trails_clean.csv"
         final_count = vector_db.ingest_trails(csv_path)
         
         print(f"\n🎯 Vector database ingestion complete!")
