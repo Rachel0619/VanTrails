@@ -44,7 +44,7 @@ The system is powered by a comprehensive dataset of Vancouver-area trails includ
 
 #### Set up environment variables
 
-rename `.env.example` to `.env` and then replace openAI API with your own.
+rename `.env.example` to `.env` and then replace OpenAI API with your own.
 
 #### Docker
 
@@ -52,7 +52,7 @@ rename `.env.example` to `.env` and then replace openAI API with your own.
 docker-compose up -d
 ```
 
-If it's your first time running this app, you also need to ingest the entire dataset by running this command before perfoming the search task.
+If it's your first time running this app, you also need to ingest the entire dataset by running this command before perfoming any search task.
 
 ```bash
 docker-compose --profile tools run --rm vantrails-ingest
@@ -64,11 +64,11 @@ Then you can check the accessibility of FlaskAPI and Gradio interface by navigat
 
 ### Using the application
 
-#### FLASK API
+#### Flask API
 
 ```bash
 URL=http://localhost:8000
-QUERY="I want an easy hike with my dog which is less than 5 km for total distance"
+QUERY="Replace this with the question you want to ask"
 DATA='{
     "query": "'${QUERY}'"
 }'
@@ -81,18 +81,9 @@ curl -X POST \
 
 #### Gradio Interface
 
-You can also interact with this RAG system by running the Gradio interface.
+You can also interact with this RAG system by Gradio.
 
 Navigate to local URL `http://127.0.0.1:7860` and ask questions.
-
-## Developer Guide
-
-### Ingestion
-
-You may want to rerun the data ingestion pipeline to reproduce the entire project.
-Here are the steps that you should follow:
-
-**TBD**
 
 ## Key Features
 
