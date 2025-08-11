@@ -83,7 +83,7 @@ curl -X POST \
 
 You can also interact with this RAG system by Gradio.
 
-Navigate to local URL `http://127.0.0.1:7860` and ask questions.
+Navigate to [local URL](http://127.0.0.1:7860) and ask questions.
 
 ## Key Features
 

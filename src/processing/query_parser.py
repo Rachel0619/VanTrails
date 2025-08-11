@@ -26,8 +26,6 @@ class TrailFilters:
     time_max: Optional[float] = None  # hours
     distance_min: Optional[float] = None  # km
     distance_max: Optional[float] = None  # km
-    region: Optional[str] = None
-    season: Optional[str] = None
     dog_friendly: Optional[bool] = None
     public_transit: Optional[bool] = None
     camping: Optional[bool] = None
@@ -41,6 +39,7 @@ class QueryParser:
     def _build_prompt(self) -> str:
         """Build the LLM prompt for filter extraction"""
         return """You are a hiking trail query parser. Extract structured filters from user queries about Vancouver hiking trails.
+Use your understanding to map similar phrases and concepts to appropriate filters.
 
 Available Filters:
 - rating_min/rating_max: 0.0-5.0 (trail ratings)
@@ -49,13 +48,24 @@ Available Filters:
 - distance_min/distance_max: km (0.5-30.0)
 - region: "Fraser Valley East", "Tri Cities", "Howe Sound", "North Shore", "Sea To Sky", etc.
 - season: "year-round", "May - October", "July - October", etc.
-- dog_friendly: true/false
-- public_transit: true/false  
-- camping: true/false
+- dog_friendly: true/false (boolean)
+- public_transit: true/false (boolean)
+- camping: true/false (boolean)
+
+The output dictionary keys should be in this order:
+1. rating_min/rating_max
+2. difficulty
+3. time_min/time_max
+4. distance_min/distance_max
+5. region
+6. season
+7. dog_friendly
+8. public_transit
+9. camping
 
 Example Query Mappings (not exhaustive):
 - "family friendly" → difficulty: "Easy"
-- "dog friendly" → dog_friendly: true
+- "I want to take my puppy with me" → dog_friendly: true
 - "no dogs" → dog_friendly: false
 - "accessible by transit" → public_transit: true
 - "camping" → camping: true
@@ -63,22 +73,34 @@ Example Query Mappings (not exhaustive):
 - "long hike" → time_max: null (no limit)
 - "close to vancouver" → region: "North Shore" or "Tri Cities"
 
-Use your understanding to map similar phrases and concepts to appropriate filters.
-
-Return ONLY valid JSON with extracted filters. Use null for unspecified filters.
+IMPORTANT: 
+- Return ONLY valid JSON with extracted filters
+- Use lowercase "true"/"false" for boolean values (not "True"/"False")
+- Round numbers to 1 decimal place (3.0 not 3)
+- EXCLUDE any filters that are not specified or cannot be inferred from the query
+- Do NOT include null values or unspecified filters in the output
+- Keys MUST appear in the exact order specified above
+- Format JSON with no spaces after colons
 
 Examples:
 Query: "recommend a family friendly, dog friendly trail"
-{"difficulty": "Easy", "dog_friendly": true}
+{{"difficulty":"Easy","dog_friendly":true}}
 
 Query: "I want a challenging hike over 5km with great views"
-{"difficulty": "Difficult", "distance_min": 5.0, "rating_min": 4.0}
+{{"difficulty":"Difficult","distance_min":5.0,"rating_min":4.0}}
 
 Query: "short easy hike accessible by public transit"
-{"difficulty": "Easy", "time_max": 2.0, "public_transit": true}
+{{"difficulty":"Easy","time_max":2.0,"public_transit":true}}
 
-Extract filters from this query:
+Extract filters from this query: {user_query}
 """
+    def _extract_json(self, text: str) -> str:
+        """Extract JSON from LLM response"""
+        # Try to find JSON in response
+        json_match = re.search(r'\{.*\}', text, re.DOTALL)
+        if json_match:
+            return json_match.group(0)
+        return text.strip()
 
     def parse_query_with_llm(self, query: str, llm_function) -> TrailFilters:
         """
@@ -91,34 +113,29 @@ Extract filters from this query:
         Returns:
             TrailFilters object with extracted filters
         """
-        full_prompt = self.filter_extraction_prompt + f'"{query}"'
+        user_prompt = self.filter_extraction_prompt + f'"{query}"'
         
         try:
             # Get LLM response
-            response = llm_function(full_prompt)
+            system_prompt = "You are a query parser. Extract structured filters from natural language queries about hiking trails."
+            response = llm_function(user_prompt, system_prompt)
             
             # Clean and parse JSON
             json_text = self._extract_json(response)
             filters_dict = json.loads(json_text)
             
+            result = TrailFilters(**{k: v for k, v in filters_dict.items() if v is not None})
             # Convert to TrailFilters object
-            return TrailFilters(**{k: v for k, v in filters_dict.items() if v is not None})
+            return {k: v for k, v in result.__dict__.items() if v is not None} 
             
         except Exception as e:
-            print(f"⚠️  LLM parsing failed: {e}")
+            print(f"LLM parsing failed: {e}")
             return TrailFilters()  # Return empty filters on failure
-    
-    def _extract_json(self, text: str) -> str:
-        """Extract JSON from LLM response"""
-        # Try to find JSON in response
-        json_match = re.search(r'\{.*\}', text, re.DOTALL)
-        if json_match:
-            return json_match.group(0)
-        return text.strip()
-    
 
-    def filters_to_dict(self, filters: TrailFilters) -> Dict[str, Any]:
-        """Convert TrailFilters to dictionary for DataFrame filtering"""
-        return {k: v for k, v in filters.__dict__.items() if v is not None}
 
+if __name__ == "__main__":
+    query_parser = QueryParser()
+    query = "We're looking for an intermediate-level hike somewhere in Fraser Valley East where we can set up camp overnight, and it would be nice if the conditions are good year-round"
+    filters = query_parser.parse_query_with_llm(query, llm_function)
+    print(filters)
 

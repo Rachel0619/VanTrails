@@ -37,9 +37,7 @@ def main():
         print(f"\n🎯 Vector database ingestion complete!")
         print(f"   Total trails: {final_count}")
         
-        # Test search functionality for new collections
-        if is_new_collection:
-            test_search(vector_db)
+        test_search(vector_db)
             
     except Exception as e:
         print(f"❌ Ingestion failed: {e}")
@@ -58,17 +56,10 @@ def test_search(vector_db):
     print(f"Query: '{test_query}'")
     
     try:
-        # Extract filters using query parser
-        query_parser = QueryParser()
-        filters = query_parser.parse_query_with_llm(test_query, llm_function)
-        filters_dict = query_parser.filters_to_dict(filters)
-        
-        print(f"🎯 Extracted filters: {filters_dict}")
-        
         # Search with filters
-        results = vector_db.search_trails(test_query, filters_dict, limit=3)
+        results = vector_db.search_trails(test_query, limit=3)
         
-        print(f"\n🏔️  Found {len(results)} trails:")
+        print(f"\nFound {len(results)} trails:")
         for i, result in enumerate(results, 1):
             trail = result.payload
             score = result.score
@@ -77,7 +68,7 @@ def test_search(vector_db):
             print(f"   🔗 {trail['url']}")
             
     except Exception as e:
-        print(f"⚠️  Search test failed: {e}")
+        print(f"Search test failed: {e}")
 
 
 if __name__ == "__main__":

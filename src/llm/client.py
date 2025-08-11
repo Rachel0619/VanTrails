@@ -13,7 +13,7 @@ load_dotenv()
 # Initialize OpenAI client
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-def llm_function(prompt: str, system_prompt: str, temperature: float = 0.1, max_tokens: int = 200) -> str:
+def llm_function(user_prompt: str, system_prompt: str, temperature: float = 0.1, max_tokens: int = 200) -> str:
     """
     LLM function that can take custom system prompts and generation parameters
     
@@ -27,13 +27,13 @@ def llm_function(prompt: str, system_prompt: str, temperature: float = 0.1, max_
         LLM response
     """
     response = client.chat.completions.create(
-        model="gpt-4o-mini",
+        model="gpt-5-mini",
         messages=[
             {"role": "system", "content": system_prompt},
-            {"role": "user", "content": prompt}
+            {"role": "user", "content": user_prompt}
         ],
-        temperature=temperature,
-        max_tokens=max_tokens
+        # temperature=temperature,
+        # max_tokens=max_tokens
     )
     
     return response.choices[0].message.content.strip()

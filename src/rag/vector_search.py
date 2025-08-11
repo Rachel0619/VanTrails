@@ -13,6 +13,10 @@ from typing import List, Dict, Any
 from qdrant_client import QdrantClient, models
 from tqdm import tqdm
 from dotenv import load_dotenv
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+from processing.query_parser import QueryParser
+from llm.client import llm_function
 
 load_dotenv()
 
@@ -157,11 +161,12 @@ class TrailVectorDB:
         
         return collection_info.points_count
     
-    def _build_qdrant_filter(self, filters: Dict[str, Any]):
+    def build_qdrant_filter(self, filters_dict: Dict):
         """Convert filters to Qdrant format"""
+
         conditions = []
         
-        for key, value in filters.items():
+        for key, value in filters_dict.items():
             if key.endswith('_min'):
                 field = key[:-4]  # Remove '_min'
                 conditions.append(models.FieldCondition(key=field, range=models.Range(gte=value)))
@@ -173,12 +178,13 @@ class TrailVectorDB:
         
         return models.Filter(must=conditions) if conditions else None
     
-    def search_trails(self, query: str, filters: Dict[str, Any] = None, limit: int = 5):
+    def search_trails(self, query: str, limit: int = 5):
         """Search trails by semantic similarity"""
         # Prepare Qdrant filters
-        qdrant_filter = None
-        if filters:
-            qdrant_filter = self._build_qdrant_filter(filters)
+        query_parser = QueryParser()
+        filters_dict = query_parser.parse_query_with_llm(query, llm_function)
+        qdrant_filter = self.build_qdrant_filter(filters_dict)
+        print('Extracted filters:', filters_dict) 
         
         # Search using query_points
         query_points = self.client.query_points(
