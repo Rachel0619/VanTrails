@@ -13,7 +13,7 @@ For example, when processing a query like "Could you suggest an easy, family-fri
 
 I used [Promptfoo](https://www.promptfoo.dev/), an open-source CLI and library for evaluating and red-teaming LLM applications, to evaluate different combinations of prompts and LLMs.
 
-All tested prompts can be found in `prompt.py`, while the tested LLMs are configured in `promptfooconfig.yaml`.
+All tested prompts can be found in [`prompt.py`](prompts.py), while the tested LLMs are configured in [`promptfooconfig.yaml`](promptfooconfig.yaml).
 
 Based on the evaluation results, `prompt_v2` combined with `GPT-5-mini` were selected to implement the `query_parser` functionality.
 
