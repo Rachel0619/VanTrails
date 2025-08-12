@@ -17,6 +17,10 @@ All tested prompts can be found in [`prompt.py`](prompts.py), while the tested L
 
 Based on the evaluation results, `prompt_v2` combined with `GPT-5-mini` were selected to implement the `query_parser` functionality.
 
+While the pass rate is only 67.65% (69/102), those failed cases are manually reviewed by me and turns out all the outputs are actually acceptable.
+
+![promptfoo eval result](../images/evaluation_result_query_parser.jpg)
+
 
 ### Retrieval
 
