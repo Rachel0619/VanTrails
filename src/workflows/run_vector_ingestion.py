@@ -36,40 +36,9 @@ def main():
         
         print(f"\n🎯 Vector database ingestion complete!")
         print(f"   Total trails: {final_count}")
-        
-        test_search(vector_db)
             
     except Exception as e:
         print(f"❌ Ingestion failed: {e}")
         return 1
     
     return 0
-
-
-def test_search(vector_db):
-    """Test search functionality with sample query"""
-    print(f"\n🔍 Testing Search Functionality")
-    print("=" * 50)
-    
-    # Test query
-    test_query = "beginner hike under 2 hours near water or waterfalls"
-    print(f"Query: '{test_query}'")
-    
-    try:
-        # Search with filters
-        results = vector_db.search_trails(test_query, limit=3)
-        
-        print(f"\nFound {len(results)} trails:")
-        for i, result in enumerate(results, 1):
-            trail = result.payload
-            score = result.score
-            print(f"\n{i}. **{trail['name']}** (Score: {score:.3f})")
-            print(f"   📍 {trail['region']} | ⏱️  {trail['time']:.1f}h | 📏 {trail['distance']:.1f}km | 🥾 {trail['difficulty']}")
-            print(f"   🔗 {trail['url']}")
-            
-    except Exception as e:
-        print(f"Search test failed: {e}")
-
-
-if __name__ == "__main__":
-    exit(main())

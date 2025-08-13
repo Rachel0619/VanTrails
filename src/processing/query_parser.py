@@ -14,8 +14,6 @@ from dataclasses import dataclass
 # Add parent directory to path to import llm client
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from llm.client import llm_function
-
-
 @dataclass
 class TrailFilters:
     """Structured filters for trail search"""
@@ -97,7 +95,7 @@ Extract filters from this query: {user_query}
             return json_match.group(0)
         return text.strip()
 
-    def parse_query_with_llm(self, query: str, llm_function) -> TrailFilters:
+    def parse_query_with_llm(self, query: str, llm_function) -> Dict[str, Any]:
         """
         Parse query using LLM to extract filters
         
@@ -106,7 +104,7 @@ Extract filters from this query: {user_query}
             llm_function: Function that takes prompt and returns LLM response
             
         Returns:
-            TrailFilters object with extracted filters
+            Dictionary with extracted filters
         """
         user_prompt = self.filter_extraction_prompt + f'"{query}"'
         
@@ -119,14 +117,12 @@ Extract filters from this query: {user_query}
             json_text = self._extract_json(response)
             filters_dict = json.loads(json_text)
             
-            result = TrailFilters(**{k: v for k, v in filters_dict.items() if v is not None})
-            # Convert to TrailFilters object
-            return {k: v for k, v in result.__dict__.items() if v is not None} 
+            # Return dictionary with only non-null values
+            return {k: v for k, v in filters_dict.items() if v is not None}
             
         except Exception as e:
             print(f"LLM parsing failed: {e}")
-            return TrailFilters()  # Return empty filters on failure
-
+            return {}  # Return empty dict on failure
 
 if __name__ == "__main__":
     query_parser = QueryParser()

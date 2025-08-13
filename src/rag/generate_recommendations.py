@@ -12,8 +12,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from llm.client import llm_function
 
-
-def generate_trail_recommendation(user_query: str, search_results: list, llm_function: Callable[[str, str], str]) -> str:
+def generate_trail_recommendation(user_query: str, search_results: list, llm_function: Callable):
     """
     Generate a conversational trail recommendation based on search results
     
@@ -23,7 +22,7 @@ def generate_trail_recommendation(user_query: str, search_results: list, llm_fun
         llm_function: Function that takes (system_prompt, user_prompt) and returns response
         
     Returns:
-        Natural language recommendation response
+        Natural language recommendation response (string if not streaming, generator if streaming)
     """
     # Handle empty search results
     if not search_results:
@@ -71,4 +70,4 @@ Most Relevant Trails Found:
 
 Please provide a thoughtful recommendation based on the user's query and these trail options."""
 
-    return llm_function(user_prompt, system_prompt, temperature=0.7, max_tokens=600)
+    return llm_function(user_prompt, system_prompt)
