@@ -43,11 +43,9 @@ Use your understanding to map similar phrases and concepts to appropriate filter
 
 Available Filters:
 - rating_min/rating_max: 0.0-5.0 (trail ratings)
-- difficulty: "Easy", "Intermediate", "Difficult" 
+- difficulty: "Easy", "Intermediate", "Difficult" (case-sensitive, no other values allowed)
 - time_min/time_max: hours (0.25-12.0)
 - distance_min/distance_max: km (0.5-30.0)
-- region: "Fraser Valley East", "Tri Cities", "Howe Sound", "North Shore", "Sea To Sky", etc.
-- season: "year-round", "May - October", "July - October", etc.
 - dog_friendly: true/false (boolean)
 - public_transit: true/false (boolean)
 - camping: true/false (boolean)
@@ -57,11 +55,9 @@ The output dictionary keys should be in this order:
 2. difficulty
 3. time_min/time_max
 4. distance_min/distance_max
-5. region
-6. season
-7. dog_friendly
-8. public_transit
-9. camping
+5. dog_friendly
+6. public_transit
+7. camping
 
 Example Query Mappings (not exhaustive):
 - "family friendly" → difficulty: "Easy"
@@ -71,7 +67,6 @@ Example Query Mappings (not exhaustive):
 - "camping" → camping: true
 - "short hike" → time_max: 2.0
 - "long hike" → time_max: null (no limit)
-- "close to vancouver" → region: "North Shore" or "Tri Cities"
 
 IMPORTANT: 
 - Return ONLY valid JSON with extracted filters

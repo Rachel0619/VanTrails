@@ -13,7 +13,7 @@ For example, when processing a query like "Could you suggest an easy, family-fri
 
 I used [Promptfoo](https://www.promptfoo.dev/), an open-source CLI and library for evaluating and red-teaming LLM applications, to evaluate different combinations of prompts and LLMs.
 
-All tested prompts can be found in [`prompt.py`](prompts.py), while the tested LLMs are configured in [`promptfooconfig.yaml`](promptfooconfig.yaml).
+All tested prompts can be found in [`prompt.py`](query_parser/prompts.py), while the tested LLMs are configured in [`promptfooconfig.yaml`](query_parser/promptfooconfig.yaml).
 
 Based on the evaluation results, `prompt_v2` combined with `GPT-5-mini` were selected to implement the `query_parser` functionality.
 
@@ -24,8 +24,14 @@ While the pass rate is only 67.65% (69/102), those failed cases are manually rev
 
 ### Retrieval
 
+In this file ([`test_retrieval.py`](retrieval/test_retrieval.py)), I tested the functionality of `build_qdrant_filter` method in [`vector_search`](../src/rag/vector_search.py). It's important to ensure we are using a Qdrant metadata filter that is consistent with user query.
+
 
 
 ### Generation
 
 
+
+
+### To-dos
+- add egde cases to ground truth dataset

@@ -10,7 +10,7 @@ from typing import List, Dict, Any, Callable
 # Add src to path
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-from llm.client import llm_function as default_llm_function
+from llm.client import llm_function
 
 
 def generate_trail_recommendation(user_query: str, search_results: list, llm_function: Callable[[str, str], str]) -> str:
@@ -25,6 +25,10 @@ def generate_trail_recommendation(user_query: str, search_results: list, llm_fun
     Returns:
         Natural language recommendation response
     """
+    # Handle empty search results
+    if not search_results:
+        return "Sorry, I can't find any trails that satisfy all the constraints in your request. You might want to try broadening your criteria and try again."
+    
     # Format search results for the prompt
     formatted_trails = []
     for i, result in enumerate(search_results, 1):

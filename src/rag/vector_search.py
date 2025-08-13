@@ -178,13 +178,12 @@ class TrailVectorDB:
         
         return models.Filter(must=conditions) if conditions else None
     
-    def search_trails(self, query: str, limit: int = 5):
+    def search_trails(self, query: str, limit: int = 3):
         """Search trails by semantic similarity"""
         # Prepare Qdrant filters
         query_parser = QueryParser()
         filters_dict = query_parser.parse_query_with_llm(query, llm_function)
         qdrant_filter = self.build_qdrant_filter(filters_dict)
-        print('Extracted filters:', filters_dict) 
         
         # Search using query_points
         query_points = self.client.query_points(
