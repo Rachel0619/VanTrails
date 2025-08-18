@@ -14,13 +14,13 @@ load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # Note: GPT-5-mini is fixed-temperature model that only runs at temperature=1
-def llm_function(user_prompt: str, system_prompt: str, max_completion_tokens: int = 300, stream: bool = True):
+def llm_function(user_prompt: str, system_prompt: str, stream: bool = False):
     """
     LLM function that can take custom system prompts and generation parameters
     
     Args:
         prompt: The user prompt to send to LLM
-        system_prompt: The system prompt (required - no default)
+        system_pdurompt: The system prompt (required - no default)
         temperature: Sampling temperature (0.0-2.0, default 0.1 for precise tasks)
         max_tokens: Maximum tokens to generate (default 200 for short responses)
         stream: Whether to stream the response (default False)
@@ -34,7 +34,6 @@ def llm_function(user_prompt: str, system_prompt: str, max_completion_tokens: in
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt}
         ],
-        max_completion_tokens=max_completion_tokens,
         stream=stream
     )
     
@@ -42,8 +41,10 @@ def llm_function(user_prompt: str, system_prompt: str, max_completion_tokens: in
         # Return generator for streaming
         def stream_generator():
             for chunk in response:
-                if chunk.choices[0].delta.content:
+                if chunk.choices and chunk.choices[0].delta.content:
                     yield chunk.choices[0].delta.content
+                else:
+                    print(f"No content in chunk: {chunk.choices[0].delta if chunk.choices else 'No choices'}")
         return stream_generator()
     else:
         # Return complete response for non-streaming

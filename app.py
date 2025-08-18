@@ -21,6 +21,7 @@ def recommend_trails(query):
             host=os.getenv('QDRANT_HOST', 'localhost'),
             port=int(os.getenv('QDRANT_PORT', '6333'))
         )
+
         search_results = vector_db.search_trails(query, limit=3)
         
         if not search_results:
@@ -37,9 +38,13 @@ def recommend_trails(query):
             yield full_response
     
     except Exception as e:
+        print(f"Error in recommend_trails: {e}")
         yield f'Error: {str(e)}'
 
 with gr.Blocks(fill_height=True) as demo:
+
+    gr.Markdown("# Vancouver Hiking Trail Assistant")
+
     query = gr.Textbox(
         label = "Question",
         placeholder = "Describe the trail you're looking for",
@@ -67,4 +72,4 @@ with gr.Blocks(fill_height=True) as demo:
         outputs=[query, output]
     )
 
-demo.launch(server_name="0.0.0.0", server_port=7860)
+demo.launch(server_name="0.0.0.0", server_port=7861)

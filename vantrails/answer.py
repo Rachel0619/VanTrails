@@ -69,7 +69,18 @@ def recommend_trails():
                 'recommendation': "I couldn't find any trails matching your criteria. Try a different search."
             })
         
-        recommendation = generate_trail_recommendation(query, search_results, llm_function)
+        # Get the streaming recommendation and collect all chunks
+        print(f"About to call generate_trail_recommendation with {len(search_results)} results")
+        recommendation_stream = generate_trail_recommendation(query, search_results, llm_function)
+        print(f"Got recommendation_stream: {type(recommendation_stream)}")
+        
+        chunks = []
+        for chunk in recommendation_stream:
+            print(f"Got chunk: {repr(chunk)}")
+            chunks.append(chunk)
+        
+        recommendation = "".join(chunks)
+        print(f"Final recommendation length: {len(recommendation)}")
         
         result = {
             "conversation_id": conversation_id,
@@ -81,7 +92,7 @@ def recommend_trails():
         
     except Exception as e:
         current_app.logger.error(f"Error: {str(e)}")
-        return jsonify({'error': 'Something went wrong'}), 500
+        return jsonify({'error': f'Error: {str(e)}'}), 500
 
 
 if __name__ == "__main__":

@@ -22,11 +22,12 @@ def generate_trail_recommendation(user_query: str, search_results: list, llm_fun
         llm_function: Function that takes (system_prompt, user_prompt) and returns response
         
     Returns:
-        Natural language recommendation response (string if not streaming, generator if streaming)
+        Generator that yields streaming chunks
     """
     # Handle empty search results
     if not search_results:
-        return "Sorry, I can't find any trails that satisfy all the constraints in your request. You might want to try broadening your criteria and try again."
+        yield "Sorry, I can't find any trails that satisfy all the constraints in your request. You might want to try broadening your criteria and try again."
+        return
     
     # Format search results for the prompt
     formatted_trails = []
@@ -70,4 +71,9 @@ Most Relevant Trails Found:
 
 Please provide a thoughtful recommendation based on the user's query and these trail options."""
 
-    return llm_function(user_prompt, system_prompt)
+    # Get the streaming response from LLM
+    stream = llm_function(user_prompt, system_prompt, stream=True)
+    
+    # Yield each chunk as it comes
+    for chunk in stream:
+        yield chunk

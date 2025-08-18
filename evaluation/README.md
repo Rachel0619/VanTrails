@@ -21,15 +21,13 @@ While the pass rate is only 67.65% (69/102), those failed cases are manually rev
 
 ![promptfoo eval result](../images/evaluation_result_query_parser.jpg)
 
-
 ### Retrieval
 
 In this file ([`test_retrieval.py`](retrieval/test_retrieval.py)), I tested the functionality of `build_qdrant_filter` method in [`vector_search`](../src/rag/vector_search.py). It's important to ensure we are using a Qdrant metadata filter that is consistent with user query.
 
-
-
 ### Generation
 
+In this part, I used LLM-as-a-Judge to evaluate the quality of final response when given a user query. 
 
 
 

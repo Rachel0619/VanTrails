@@ -116,17 +116,14 @@ Extract filters from this query: {user_query}
             # Clean and parse JSON
             json_text = self._extract_json(response)
             filters_dict = json.loads(json_text)
-            
-            # Return dictionary with only non-null values
-            return {k: v for k, v in filters_dict.items() if v is not None}
+
+            # Return dictionary with only non-null values            
+            result = {k: v for k, v in filters_dict.items() if v is not None}
+            print(f"query_parser result: {result}")
+
+            return result
             
         except Exception as e:
-            print(f"LLM parsing failed: {e}")
+            print(f"parsing failed: {e}")
             return {}  # Return empty dict on failure
-
-if __name__ == "__main__":
-    query_parser = QueryParser()
-    query = "We're looking for an intermediate-level hike somewhere in Fraser Valley East where we can set up camp overnight, and it would be nice if the conditions are good year-round"
-    filters = query_parser.parse_query_with_llm(query, llm_function)
-    print(filters)
 
