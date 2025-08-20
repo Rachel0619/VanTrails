@@ -29,7 +29,26 @@ In this file ([`test_retrieval.py`](retrieval/test_retrieval.py)), I tested the 
 
 In this part, I used LLM-as-a-Judge to evaluate the quality of final response when given a user query. 
 
+The judge evaluates responses on a 1-4 scale and I always ask the LLM to provide an explanation for giving a specific rating:
 
+- **4**: Excellent - relevant, direct, detailed, addresses all concerns
+- **3**: Mostly helpful - provides support but could be improved  
+- **2**: Mostly not helpful - misses key aspects
+- **1**: Terrible - completely irrelevant or very partial
 
-### To-dos
-- add egde cases to ground truth dataset
+Here are the results:
+
+```
+==================================================
+GENERATION EVALUATION RESULTS
+==================================================
+Total queries evaluated: 21
+Valid ratings: 21
+Average rating: 3.29/4
+Rating distribution:
+  1/4: 0 (0.0%)
+  2/4: 3 (14.3%)
+  3/4: 9 (42.9%)
+  4/4: 9 (42.9%)
+==================================================
+```

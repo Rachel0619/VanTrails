@@ -43,8 +43,6 @@ def llm_function(user_prompt: str, system_prompt: str, stream: bool = False):
             for chunk in response:
                 if chunk.choices and chunk.choices[0].delta.content:
                     yield chunk.choices[0].delta.content
-                else:
-                    print(f"No content in chunk: {chunk.choices[0].delta if chunk.choices else 'No choices'}")
         return stream_generator()
     else:
         # Return complete response for non-streaming

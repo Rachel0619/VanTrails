@@ -25,10 +25,12 @@ The system is powered by a comprehensive dataset of Vancouver-area trails includ
   - Camping availability
   - Detailed descriptions with practical tips
 
+The code I used to scrape this dataset from the Internet can be found at [scraper.py](src/scrapers/scraper.py).
+
 ## Technologies
 
 - Qdrant for vector database and semantic search
-- GPT-4o-mini as an LLM
+- GPT-5-mini as an LLM
 - FLASK for REST API
 - Gradio for user interface
 - Docker for containerization
@@ -49,13 +51,14 @@ rename `.env.example` to `.env` and then replace OpenAI API with your own.
 #### Docker
 
 ```bash
-docker-compose up -d
+$ docker-compose build
+$ docker-compose up -d
 ```
 
 If it's your first time running this app, you also need to ingest the entire dataset by running this command before perfoming any search task.
 
 ```bash
-docker-compose --profile tools run --rm vantrails-ingest
+$ docker-compose --profile tools run --rm vantrails-ingest
 ```
 
 Then you can check the accessibility of FlaskAPI and Gradio interface by navigating to these sites:
@@ -85,15 +88,6 @@ You can also interact with this RAG system by Gradio.
 
 Navigate to [local URL](http://127.0.0.1:7860) and ask questions.
 
-## Key Features
-
-- Semantic Search: Understands natural language queries
-- Flexible LLM Support: Works with OpenAI, Claude, Llama, and other models
-- Rich Metadata Filtering: Filter by difficulty, region, dog-friendliness, seasons, etc.
-- Conversational Responses: Get detailed explanations, not just lists
-- Incremental Updates: Add new trails without rebuilding the entire database
-- Extensible Architecture: Easy to add new data sources and features
-
 ## Contributing
 
 This project is currently in active development. Contributions, suggestions, and feedback are welcome! Just create an issue and submit your PR!
@@ -101,3 +95,10 @@ This project is currently in active development. Contributions, suggestions, and
 ## License
 
 [License information to be added]
+
+## Future improvements
+
+- improve the front end, make it more aesthetically appealing and perhaps more interactive
+- more prompting to improve the output format for final response
+- try hybrid search and document reranking
+- add edge cases for evaluation (no filter, no search result, etc.)
