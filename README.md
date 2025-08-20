@@ -88,13 +88,17 @@ You can also interact with this RAG system by Gradio.
 
 Navigate to [local URL](http://127.0.0.1:7860) and ask questions.
 
+## Evaluation
+
+You can find a detailed explanation for the evaluation methodologies I used for this project at [README.md](evaluation/README.md)
+
 ## Contributing
 
 This project is currently in active development. Contributions, suggestions, and feedback are welcome! Just create an issue and submit your PR!
 
 ## License
 
-[License information to be added]
+This project uses MIT license.
 
 ## Future improvements
 
