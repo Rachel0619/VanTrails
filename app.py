@@ -1,9 +1,15 @@
 import gradio as gr
 import sys
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+# Initialize Phoenix tracing BEFORE importing other modules
+sys.path.append(os.path.join(os.path.dirname(__file__), 'monitoring'))
+from tracing import tracer
 
 sys.path.append(os.path.join(os.path.dirname(__file__), 'src/workflows'))
-
 from recommend_trails import recommend_trails
 
 with gr.Blocks(fill_height=True) as demo:

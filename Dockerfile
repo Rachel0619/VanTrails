@@ -23,8 +23,9 @@ RUN uv sync
 COPY src/ ./src/
 COPY vantrails/ ./vantrails/
 COPY data/ ./data/
+COPY monitoring/ ./monitoring/
 COPY app.py ./
-COPY .env.example ./
+COPY .env ./
 
 # Expose port for Flask API
 EXPOSE 8000

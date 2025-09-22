@@ -92,6 +92,10 @@ Navigate to [local URL](http://127.0.0.1:7860) and ask questions.
 
 You can find a detailed explanation for the evaluation methodologies I used for this project at [README.md](evaluation/README.md)
 
+## Monitoring
+
+You can find more details about the monitoring setup [here](monitoring/tracing.py).
+
 ## Contributing
 
 This project is currently in active development. Contributions, suggestions, and feedback are welcome! Just create an issue and submit your PR!

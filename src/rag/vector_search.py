@@ -17,6 +17,7 @@ import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from processing.query_parser import QueryParser
 from llm.client import llm_function
+# Tracing imports removed for now
 
 load_dotenv()
 

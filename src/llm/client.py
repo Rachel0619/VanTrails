@@ -4,11 +4,14 @@ Simple LLM client for query parsing
 """
 
 import os
+import sys
 from dotenv import load_dotenv
 from openai import OpenAI
 
 # Load environment variables
 load_dotenv()
+
+# Tracing imports removed for now
 
 # Initialize OpenAI client
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
