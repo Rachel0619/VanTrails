@@ -34,6 +34,8 @@ The code I used to scrape this dataset from the Internet can be found at [scrape
 - FLASK for REST API
 - Gradio for user interface
 - Docker for containerization
+- Promptfoo for streamlined prompt engineering and evaluation
+- OpenTelemetry for monitoring and tracing
 
 ## Getting Started
 
