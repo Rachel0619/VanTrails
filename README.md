@@ -4,13 +4,13 @@ An intelligent RAG application that provides personalized Vancouver hiking trail
 
 ![VanTrails Cover](images/cover.jpg)
 
-## Project Overview
+## 📋 Project Overview
 
 Finding the right hiking trail in Vancouver can be overwhelming with thousands of available options. Generic search results often miss the nuances of what makes a trail perfect for your specific needs while reading and researching comments from other hikers on social media is very time consuming.
 
 VanTrails is an intelligent trail recommendation system that helps hikers discover the perfect trails in Vancouver, BC. Using advanced RAG technology, the system provides personalized, conversational recommendations based on user queries like "I want an easy hike with my dog near Vancouver" or "Show me challenging winter trails with great views."
 
-## Dataset
+## 📊 Dataset
 
 The system is powered by a comprehensive dataset of Vancouver-area trails including:
 
@@ -27,7 +27,38 @@ The system is powered by a comprehensive dataset of Vancouver-area trails includ
 
 The code I used to scrape this dataset from the Internet can be found at [scraper.py](src/scrapers/scraper.py).
 
-## Technologies
+## 🏗️ Project Structure
+
+```
+VanTrails/
+├── app.py                    # Main Flask application
+├── docker-compose.yml        # Docker composition file
+├── Dockerfile               # Docker image definition
+├── pyproject.toml           # Python project configuration
+├── .env.example             # Environment variables template
+├── .env                     # Environment variables (not in git)
+├── data/                    # Dataset files
+├── src/
+│   ├── llm/                 # LLM integration modules
+│   ├── processing/          # Data processing utilities
+│   ├── rag/                 # RAG pipeline implementation
+│   ├── scrapers/            # Web scraping utilities
+│   └── workflows/           # Application workflows
+├── vantrails/
+│   ├── __init__.py          # Package initialization
+│   └── answer.py            # Answer generation logic
+├── evaluation/              # Evaluation methodologies and tests
+│   ├── generation/          # Generation quality evaluation
+│   ├── query_parser/        # Query parsing evaluation
+│   └── retrieval/           # Retrieval performance evaluation
+├── monitoring/
+│   └── tracing.py           # OpenTelemetry monitoring setup
+├── images/                  # Project images and assets
+├── qdrant_storage/          # Vector database storage
+└── instance/                # Flask instance folder
+```
+
+## 🛠️ Technologies
 
 - Qdrant for vector database and semantic search
 - GPT-5-mini as an LLM
@@ -37,7 +68,7 @@ The code I used to scrape this dataset from the Internet can be found at [scrape
 - Promptfoo for streamlined prompt engineering and evaluation
 - OpenTelemetry for monitoring and tracing
 
-## Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
 - Python 3.12+
@@ -90,23 +121,23 @@ You can also interact with this RAG system by Gradio.
 
 Navigate to [local URL](http://127.0.0.1:7860) and ask questions.
 
-## Evaluation
+## 📈 Evaluation
 
 You can find a detailed explanation for the evaluation methodologies I used for this project at [README.md](evaluation/README.md)
 
-## Monitoring
+## 📊 Monitoring
 
 You can find more details about the monitoring setup [here](monitoring/tracing.py).
 
-## Contributing
+## 🤝 Contributing
 
 This project is currently in active development. Contributions, suggestions, and feedback are welcome! Just create an issue and submit your PR!
 
-## License
+## 📄 License
 
 This project uses MIT license.
 
-## Future improvements
+## 🔮 Future improvements
 
 - improve the front end, make it more aesthetically appealing and perhaps more interactive
 - more prompting to improve the output format for final response
