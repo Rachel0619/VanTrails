@@ -127,7 +127,7 @@ You can find a detailed explanation for the evaluation methodologies I used for 
 
 ## 📊 Monitoring
 
-You can find more details about the monitoring setup [here](monitoring/tracing.py).
+You can find more details about the monitoring setup [here](monitoring/README.md).
 
 ## 🤝 Contributing
 
