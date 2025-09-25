@@ -31,13 +31,13 @@ The code I used to scrape this dataset from the Internet can be found at [scrape
 
 ```
 VanTrails/
-├── app.py                    # Main Flask application
-├── docker-compose.yml        # Docker composition file
+├── app.py                   # Main Flask application
+├── docker-compose.yml       # Docker composition file
 ├── Dockerfile               # Docker image definition
 ├── pyproject.toml           # Python project configuration
 ├── .env.example             # Environment variables template
 ├── .env                     # Environment variables (not in git)
-├── data/                    # Dataset files
+├── data/               
 ├── src/
 │   ├── llm/                 # LLM integration modules
 │   ├── processing/          # Data processing utilities
@@ -45,17 +45,17 @@ VanTrails/
 │   ├── scrapers/            # Web scraping utilities
 │   └── workflows/           # Application workflows
 ├── vantrails/
-│   ├── __init__.py          # Package initialization
+│   ├── __init__.py        
 │   └── answer.py            # Answer generation logic
-├── evaluation/              # Evaluation methodologies and tests
+├── evaluation/           
 │   ├── generation/          # Generation quality evaluation
 │   ├── query_parser/        # Query parsing evaluation
 │   └── retrieval/           # Retrieval performance evaluation
 ├── monitoring/
 │   └── tracing.py           # OpenTelemetry monitoring setup
-├── images/                  # Project images and assets
-├── qdrant_storage/          # Vector database storage
-└── instance/                # Flask instance folder
+├── images/            
+├── qdrant_storage/         
+└── instance/                
 ```
 
 ## 🛠️ Technologies
@@ -88,7 +88,7 @@ $ docker-compose build
 $ docker-compose up -d
 ```
 
-If it's your first time running this app, you also need to ingest the entire dataset by running this command before perfoming any search task.
+If it's your first time running this app, you also need to ingest the entire dataset by running this command before performing any search task.
 
 ```bash
 $ docker-compose --profile tools run --rm vantrails-ingest

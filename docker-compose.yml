@@ -76,6 +76,14 @@ services:
     profiles:
       - tools
     command: ["uv", "run", "src/workflows/run_vector_ingestion.py"]
+  
+# Phoenix Monitoring Dashboard
+  phoenix:
+    image: arizephoenix/phoenix:latest
+    container_name: vantrails-phoenix
+    ports:
+      - "6006:6006"
+    restart: unless-stopped
 
 volumes:
   qdrant_storage:

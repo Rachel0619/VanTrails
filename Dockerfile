@@ -36,6 +36,3 @@ EXPOSE 7860
 # Set environment variables
 ENV PYTHONPATH=/app
 ENV PYTHONUNBUFFERED=1
-
-# Default command (can be overridden in docker-compose)
-CMD ["uv", "run", "vantrails/answer.py"]
