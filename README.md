@@ -123,7 +123,7 @@ Navigate to [local URL](http://127.0.0.1:7860) and ask questions.
 
 ## 📈 Evaluation
 
-You can find a detailed explanation for the evaluation methodologies I used for this project at [README.md](evaluation/README.md)
+I documented the detailed explanation for the evaluation methodologies I used for this project [here](evaluation/README.md)
 
 ## 📊 Monitoring
 
