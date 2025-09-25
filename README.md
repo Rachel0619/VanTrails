@@ -139,7 +139,7 @@ This project uses MIT license.
 
 ## 🔮 Future improvements
 
-- improve the front end, make it more aesthetically appealing and perhaps more interactive
-- more prompting to improve the output format for final response
-- try hybrid search and document reranking
-- add edge cases for evaluation (no filter, no search result, etc.)
+- [ ] improve the front end, make it more aesthetically appealing and perhaps more interactive
+- [ ] Deploy the app with public url
+- [ ] hybrid search and document reranking
+- [ ] add edge cases for evaluation (no filter, no search result, etc.)
